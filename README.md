@@ -1,70 +1,130 @@
-# smart-contract-security-hardhat
-Smart contract security testing with Hardhat, including findings and step-by-step implementation
+# 🛡️ Smart Contract Security Audit (Using Hardhat)
+
+This project demonstrates a step-by-step approach to auditing smart contracts using [Hardhat](https://hardhat.org/). It includes environment setup, contract development, test writing, vulnerability identification, and documentation with screenshots.
+
+---
+
+## 📁 Project Structure
+
+```
 smart-contract-security-hardhat/
-├── contracts/               # Smart contract source code
-│   └── MyContract.sol       # Example smart contract file
-├── test/                    # Unit tests for smart contracts
-│   └── myContractTest.js    # Hardhat test script
-├── scripts/                 # Deployment scripts
-│   └── deploy.js            # Smart contract deployment script
-├── hardhat.config.js        # Hardhat configuration file
-├── README.md                # Project overview and instructions
-├── .gitignore               # Files to exclude from Git (e.g., node_modules)
-└── package.json             # Project dependencies and scripts
-# Smart Contract Security Testing with Hardhat
+├── contracts/           # Smart contract source files
+├── scripts/             # Deployment scripts
+├── test/                # Test cases (including security checks)
+├── screenshots/         # Audit and testing screenshots
+├── findings.md          # Documented vulnerabilities & analysis
+├── README.md            # Project overview and guide
+├── hardhat.config.js    # Hardhat configuration file
+└── package.json         # Project dependencies
+```
 
-This repository demonstrates the process of securing smart contracts using Hardhat. The project focuses on testing, identifying vulnerabilities, and securing DeFi contracts. Step-by-step documentation and findings are provided for each phase.
+---
 
-## Table of Contents
-- [Project Overview](#project-overview)
-- [Folder Structure](#folder-structure)
-- [Setup Instructions](#setup-instructions)
-- [Running Tests](#running-tests)
-- [Findings](#findings)
-- [Contributing](#contributing)
+## 🧱 Step 1: Setup Hardhat
 
-## Project Overview
-This project was created to explore smart contract security practices using the Hardhat framework. It includes contract development, testing for vulnerabilities, and the implementation of best practices to ensure secure deployment.
+Install Hardhat and initiate the project:
 
-## Folder Structure
-- **contracts/**: Contains the smart contract code.
-- **test/**: Contains the unit tests for the contracts.
-- **scripts/**: Contains deployment scripts.
-- **hardhat.config.js**: Configuration file for Hardhat.
+```bash
+mkdir smart-contract-security-hardhat
+cd smart-contract-security-hardhat
+npm init -y
+npm install --save-dev hardhat
+npx hardhat
+```
+Choose **"Create a basic sample project"** when prompted.
 
-## Setup Instructions
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/your-username/smart-contract-security-hardhat.git
-   cd smart-contract-security-hardhat
-2. Install dependencies:
-- npm install
+### Screenshot:
+![Hardhat Setup](https://github.com/user-attachments/assets/a707dec3-a0df-4401-ab64-c509488b174f)
 
-3.Compile the smart contract:
-- npx hardhat compile
+---
 
+## 📜 Step 2: Write a Sample Contract
 
-### Step 4: Add the Project Step-by-Step
-Let’s break this down into manageable steps and add them gradually:
+In `contracts/Sample.sol`:
 
-1. **Set up Hardhat**:
-   - Install Hardhat and initialize the project.
-   - Configure the basic files (`hardhat.config.js`).
-   
-2. **Create the Smart Contract**:
-   - Create a sample smart contract to test (e.g., a basic ERC20 token or DeFi contract).
-   - Add a simple vulnerability (e.g., reentrancy attack or unprotected function).
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-3. **Write Unit Tests**:
-   - Add tests for common vulnerabilities like reentrancy, overflow/underflow, access control, etc.
+contract Sample {
+    uint256 public value;
 
-4. **Security Audit & Remediation**:
-   - Run Hardhat's testing framework to identify vulnerabilities.
-   - Document how you identified and fixed vulnerabilities.
-   
-5. **Final Documentation**:
-   - Document the entire process, including findings and mitigation strategies.
+    function setValue(uint256 _val) public {
+        value = _val;
+    }
+}
+```
 
-### Step 5: Execute the Plan
+---
 
-Let’s start by **setting up Hardhat** and creating a basic smart contract. Would you like to proceed with that? I can provide the commands and code to set everything up.
+## 🧪 Step 3: Write Test Cases (Including Vulnerability Checks)
+
+In `test/Sample.js`:
+
+```javascript
+const { expect } = require("chai");
+
+describe("Sample", function () {
+  it("Should set the value correctly", async function () {
+    const Sample = await ethers.getContractFactory("Sample");
+    const sample = await Sample.deploy();
+    await sample.deployed();
+
+    await sample.setValue(10);
+    expect(await sample.value()).to.equal(10);
+  });
+});
+```
+
+---
+
+## 🧩 Step 4: Analyze and Document Findings
+
+Create a `findings.md` file to note bugs and suggestions:
+
+```
+## 🐛 Finding 1: No Input Validation
+- Function `setValue` accepts any number, including potential edge cases.
+- 🔒 Recommendation: Add input validation to prevent malicious values.
+
+## 🐛 Finding 2: Visibility Leakage
+- No private/internal state.
+- 🔒 Recommendation: Mark non-user-facing functions/variables appropriately.
+```
+
+---
+
+## 📸 Audit Screenshots
+
+| Screenshot | Description |
+|-----------|-------------|
+| ![Security Audit 1](https://github.com/user-attachments/assets/97169b3a-2709-4be2-80f7-4d6ee6498ba4) | Audit result overview |
+| ![Sample](https://github.com/user-attachments/assets/33460d14-9082-4366-b7ec-deb7900ba4b6) | Testing logic flaws |
+| ![Backend](https://github.com/user-attachments/assets/db13b245-11b9-43f1-8730-418af792cdf5) | Backend vulnerability assessment |
+| ![33](https://github.com/user-attachments/assets/c2dcc079-2a97-4035-8181-78b3212d4566) | Contract behavior under fuzzing |
+| ![22](https://github.com/user-attachments/assets/cf7e06d1-e85f-465b-9d84-f65bec6a925f) | Post-audit summary |
+
+---
+
+## 🚀 Run the Audit Tests
+
+```bash
+npx hardhat test
+```
+
+---
+
+## 📬 Contributing
+
+Feel free to fork this project, submit improvements, or log issues!
+
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+Let’s keep building secure contracts! 🛡️
+
